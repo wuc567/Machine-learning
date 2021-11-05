@@ -7,6 +7,6 @@ Neural networks have a strong ability for self-learning and self-adapting, and h
 ---
 
 #### Data:
-[Data](https://github.com/wuc567/Pattern-Mining/blob/master/HAOP-Miner/DataSet.zip)  (All sequences)
+[Data](https://github.com/wuc567/Machine-learning/blob/main/STWD-SFNN/data.zip)  
 #### Algorithms:
-[STWD-SFNN and all competitive algorithms](https://github.com/wuc567/Pattern-Mining/blob/master/HAOP-Miner/HAOP-Miner_code.zip)
+[STWD-SFNN and all competitive algorithms](https://github.com/wuc567/Machine-learning/blob/main/STWD-SFNN/algorithms.zip)

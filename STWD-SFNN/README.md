@@ -1,0 +1,12 @@
+STWD-SFNN: Sequential three-way decisions with a single hidden layer feedforward neural network
+
+#### Abstract:
+
+Neural networks have a strong ability for self-learning and self-adapting, and have been widely used in many fields. The design of neural network topology, including the number of nodes and layers of the hidden layers, is one of the essential factors affecting the performance of the model. Meanwhile, compared with the tree-based structure model, the continuity of the neural network limits its performance on the structured datasets. To determine the number of hidden layer nodes in a single hidden layer feedforward neural network (SFNN), three-way decisions with a SFNN (TWD-SFNN) adopted three-way decision strategy to compensate for the drawbacks of utilizing empirical formula methods. However, TWD-SFNN has a long training time, and does not consider process costs, since it has fixed threshold parameters. Inspired by sequential three-way decisions, this paper proposes a novel model called sequential three-way decisions with a single hidden layer feedforward neural network (STWD-SFNN) to further improve the performance on structured datasets. STWD-SFNN adopts multi-granularity layers to dynamically learn the number of hidden layer nodes from coarse to fine, and to set dynamic the sequential threshold parameters. More specifically, in the coarse granular level, STWD-SFNN handles easy-to-classify instances by applying strict threshold conditions; with the increasing numbers of hidden layer nodes in the fine granular level, STWD-SFNN focuses more on disposing of the difficult-to-classify instances by applying loose threshold conditions, thereby realizing the classification of instances. More importantly, STWD-SFNN considers and reports the process cost produced from each granular level. The experimental results verify that STWD-SFNN has a more compact network structure and a shorter training time on structured datasets than TWD-SFNN and SFNN using empirical formulas, and has better generalization performance than the other classical classification models.
+
+---
+
+#### Data:
+[Data](https://github.com/wuc567/Pattern-Mining/blob/master/HAOP-Miner/DataSet.zip)  (All sequences)
+#### Algorithms:
+[STWD-SFNN and all competitive algorithms](https://github.com/wuc567/Pattern-Mining/blob/master/HAOP-Miner/HAOP-Miner_code.zip)

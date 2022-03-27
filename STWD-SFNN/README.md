@@ -7,7 +7,7 @@ The three-way decisions strategy was employed to construct neural network topolo
 ---
 
 #### Data:
-[Data](https://github.com/wuc567/Machine-learning/blob/main/STWD-SFNN/data.zip)  
+[Data](https://github.com/wuc567/Machine-learning/blob/main/STWD-SFNN/data)  
 
 #### Algorithms:
-[STWD-SFNN and all competitive algorithms](https://github.com/wuc567/Machine-learning/blob/main/STWD-SFNN/algorithms.zip)
+[STWD-SFNN and all competitive algorithms](https://github.com/wuc567/Machine-learning/tree/main/STWD-SFNN/algorithms)

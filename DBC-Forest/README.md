@@ -10,6 +10,6 @@ As a deep learning model, deep confidence screening forest (gcForestcs) has achi
 
 #### Algorithms:
 
-[DBC-Forest: Deep forest with binning confidence screening](https://github.com/wuc567/)
+[DBC-Forest: Deep forest with binning confidence screening](https://github.com/wuc567/Machine-learning/tree/main/DBC-Forest)
 
  

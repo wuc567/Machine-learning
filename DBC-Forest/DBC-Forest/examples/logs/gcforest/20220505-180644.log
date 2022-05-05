@@ -1,0 +1,6 @@
+[ 2022-05-05 18:06:53,821][cascade_classifier_thresh.fit_transform] X_groups_train.shape=[(35000, 5000)],y_train.shape=(35000,),X_groups_test.shape=[(15000, 5000)],y_test.shape=(15000,)
+[ 2022-05-05 18:06:56,119][cascade_classifier_thresh.fit_transform] group_dims=[5000]
+[ 2022-05-05 18:06:56,119][cascade_classifier_thresh.fit_transform] group_starts=[0]
+[ 2022-05-05 18:06:56,120][cascade_classifier_thresh.fit_transform] group_ends=[5000]
+[ 2022-05-05 18:06:56,120][cascade_classifier_thresh.fit_transform] X_train.shape=(35000, 5000),X_test.shape=(15000, 5000)
+[ 2022-05-05 18:06:56,513][cascade_classifier_thresh.fit_transform] [layer=0] look_indexs=[0], X_cur_train.shape=(35000, 5000), X_cur_test.shape=(15000, 5000)

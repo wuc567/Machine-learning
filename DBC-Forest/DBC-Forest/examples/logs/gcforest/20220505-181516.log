@@ -1,0 +1,136 @@
+[ 2022-05-05 18:15:21,858][cascade_classifier_cs.fit_transform] X_groups_train.shape=[(35000, 5000)],y_train.shape=(35000,),X_groups_test.shape=[(15000, 5000)],y_test.shape=(15000,)
+[ 2022-05-05 18:15:24,167][cascade_classifier_cs.fit_transform] group_dims=[5000]
+[ 2022-05-05 18:15:24,167][cascade_classifier_cs.fit_transform] group_starts=[0]
+[ 2022-05-05 18:15:24,167][cascade_classifier_cs.fit_transform] group_ends=[5000]
+[ 2022-05-05 18:15:24,167][cascade_classifier_cs.fit_transform] X_train.shape=(35000, 5000),X_test.shape=(15000, 5000)
+[ 2022-05-05 18:15:24,544][cascade_classifier_cs.fit_transform] [layer=0] look_indexs=[0], X_cur_train.shape=(35000, 5000), X_cur_test.shape=(15000, 5000)
+[ 2022-05-05 18:15:40,499][kfold_wrapper.log_eval_metrics] Accuracy(layer_0 - estimator_0 - 3_folds.train_0.predict)=84.01%
+[ 2022-05-05 18:15:57,394][kfold_wrapper.log_eval_metrics] Accuracy(layer_0 - estimator_0 - 3_folds.train_1.predict)=84.07%
+[ 2022-05-05 18:16:14,181][kfold_wrapper.log_eval_metrics] Accuracy(layer_0 - estimator_0 - 3_folds.train_2.predict)=84.89%
+[ 2022-05-05 18:16:14,567][kfold_wrapper.log_eval_metrics] Accuracy(layer_0 - estimator_0 - 3_folds.train_cv.predict)=84.32%
+[ 2022-05-05 18:16:14,567][kfold_wrapper.log_eval_metrics] Accuracy(layer_0 - estimator_0 - 3_folds.test.predict)=86.95%
+[ 2022-05-05 18:16:22,662][kfold_wrapper.log_eval_metrics] Accuracy(layer_0 - estimator_1 - 3_folds.train_0.predict)=82.70%
+[ 2022-05-05 18:16:31,299][kfold_wrapper.log_eval_metrics] Accuracy(layer_0 - estimator_1 - 3_folds.train_1.predict)=83.11%
+[ 2022-05-05 18:16:39,615][kfold_wrapper.log_eval_metrics] Accuracy(layer_0 - estimator_1 - 3_folds.train_2.predict)=82.48%
+[ 2022-05-05 18:16:39,889][kfold_wrapper.log_eval_metrics] Accuracy(layer_0 - estimator_1 - 3_folds.train_cv.predict)=82.77%
+[ 2022-05-05 18:16:39,889][kfold_wrapper.log_eval_metrics] Accuracy(layer_0 - estimator_1 - 3_folds.test.predict)=85.20%
+[ 2022-05-05 18:16:39,890][cascade_classifier_cs.calc_accuracy] Accuracy(layer_0 - train part2 accuracy)=85.25%
+[ 2022-05-05 18:16:39,890][cascade_classifier_cs.fit_transform] ------------------------layer_0 - train accuracy 85.24857142857142
+[ 2022-05-05 18:16:39,890][cascade_classifier_cs.calc_accuracy] Accuracy(layer_0 - test part2 accuracy)=86.99%
+[ 2022-05-05 18:16:39,891][cascade_classifier_cs.fit_transform] ------------------------layer_0 - test accuracy 86.98666666666666
+[ 2022-05-05 18:16:39,926][cascade_classifier_cs.getAutoThresh] Training accuracy now is 0.8524857142857143 and accuracy part1 needs to get 0.9262428571428571 (2 times)
+[ 2022-05-05 18:16:39,946][cascade_classifier_cs.decide_thresh] #instances = 35000, num_thresh 8964, CX threshold: 0.5800000131130219
+[ 2022-05-05 18:16:39,949][cascade_classifier_cs.confidence_screening] In layer 1, train num is 8666, part decay is 0.2476
+[ 2022-05-05 18:16:39,950][cascade_classifier_cs.calc_accuracy] Accuracy(layer_0 - train.1part(26334))=92.44%
+[ 2022-05-05 18:16:39,951][cascade_classifier_cs.calc_accuracy] Accuracy(layer_0 - train.2part(8666))=63.40%
+[ 2022-05-05 18:16:40,079][cascade_classifier_cs.confidence_screening_test] In layer 1, test num is 3705, part decay is 0.247
+[ 2022-05-05 18:16:40,079][cascade_classifier_cs.calc_accuracy] Accuracy(layer_0 - test.1part(11295))=94.01%
+[ 2022-05-05 18:16:40,080][cascade_classifier_cs.calc_accuracy] Accuracy(layer_0 - test.2part(3705))=65.59%
+[ 2022-05-05 18:16:40,378][cascade_classifier_cs.fit_transform] [layer=1] look_indexs=[0], X_cur_train.shape=(8666, 5004), X_cur_test.shape=(3705, 5004)
+[ 2022-05-05 18:16:43,855][kfold_wrapper.log_eval_metrics] Accuracy(layer_1 - estimator_0 - 3_folds.train_0.predict)=68.26%
+[ 2022-05-05 18:16:47,288][kfold_wrapper.log_eval_metrics] Accuracy(layer_1 - estimator_0 - 3_folds.train_1.predict)=67.95%
+[ 2022-05-05 18:16:50,650][kfold_wrapper.log_eval_metrics] Accuracy(layer_1 - estimator_0 - 3_folds.train_2.predict)=68.49%
+[ 2022-05-05 18:16:50,808][kfold_wrapper.log_eval_metrics] Accuracy(layer_1 - estimator_0 - 3_folds.train_cv.predict)=68.23%
+[ 2022-05-05 18:16:50,808][kfold_wrapper.log_eval_metrics] Accuracy(layer_1 - estimator_0 - 3_folds.test.predict)=71.88%
+[ 2022-05-05 18:16:52,208][kfold_wrapper.log_eval_metrics] Accuracy(layer_1 - estimator_1 - 3_folds.train_0.predict)=66.32%
+[ 2022-05-05 18:16:53,684][kfold_wrapper.log_eval_metrics] Accuracy(layer_1 - estimator_1 - 3_folds.train_1.predict)=66.94%
+[ 2022-05-05 18:16:55,171][kfold_wrapper.log_eval_metrics] Accuracy(layer_1 - estimator_1 - 3_folds.train_2.predict)=66.00%
+[ 2022-05-05 18:16:55,324][kfold_wrapper.log_eval_metrics] Accuracy(layer_1 - estimator_1 - 3_folds.train_cv.predict)=66.42%
+[ 2022-05-05 18:16:55,324][kfold_wrapper.log_eval_metrics] Accuracy(layer_1 - estimator_1 - 3_folds.test.predict)=70.72%
+[ 2022-05-05 18:16:55,325][cascade_classifier_cs.calc_accuracy] Accuracy(layer_1 - train part2 accuracy)=69.18%
+[ 2022-05-05 18:16:55,325][cascade_classifier_cs.fit_transform] ------------------------layer_1 - train accuracy 86.68
+[ 2022-05-05 18:16:55,325][cascade_classifier_cs.calc_accuracy] Accuracy(layer_1 - test part2 accuracy)=71.98%
+[ 2022-05-05 18:16:55,325][cascade_classifier_cs.fit_transform] ------------------------layer_1 - test accuracy 88.56666666666666
+[ 2022-05-05 18:16:55,349][cascade_classifier_cs.getAutoThresh] Training accuracy now is 0.6917839833833371 and accuracy part1 needs to get 0.8458919916916685 (2 times)
+[ 2022-05-05 18:16:55,354][cascade_classifier_cs.decide_thresh] #instances = 8666, num_thresh 6764, CX threshold: 0.6400000154972076
+[ 2022-05-05 18:16:55,355][cascade_classifier_cs.confidence_screening] In layer 2, train num is 6556, part decay is 0.756519732287099
+[ 2022-05-05 18:16:55,355][cascade_classifier_cs.calc_accuracy] Accuracy(layer_1 - train.1part(2110))=84.45%
+[ 2022-05-05 18:16:55,355][cascade_classifier_cs.calc_accuracy] Accuracy(layer_1 - train.2part(6556))=64.26%
+[ 2022-05-05 18:16:55,419][cascade_classifier_cs.confidence_screening_test] In layer 2, test num is 2883, part decay is 0.7781376518218623
+[ 2022-05-05 18:16:55,419][cascade_classifier_cs.calc_accuracy] Accuracy(layer_1 - test.1part(822))=89.17%
+[ 2022-05-05 18:16:55,419][cascade_classifier_cs.calc_accuracy] Accuracy(layer_1 - test.2part(2883))=67.08%
+[ 2022-05-05 18:16:55,578][cascade_classifier_cs.fit_transform] [layer=2] look_indexs=[0], X_cur_train.shape=(6556, 5004), X_cur_test.shape=(2883, 5004)
+[ 2022-05-05 18:16:58,380][kfold_wrapper.log_eval_metrics] Accuracy(layer_2 - estimator_0 - 3_folds.train_0.predict)=65.51%
+[ 2022-05-05 18:17:01,427][kfold_wrapper.log_eval_metrics] Accuracy(layer_2 - estimator_0 - 3_folds.train_1.predict)=66.41%
+[ 2022-05-05 18:17:04,417][kfold_wrapper.log_eval_metrics] Accuracy(layer_2 - estimator_0 - 3_folds.train_2.predict)=64.07%
+[ 2022-05-05 18:17:04,556][kfold_wrapper.log_eval_metrics] Accuracy(layer_2 - estimator_0 - 3_folds.train_cv.predict)=65.33%
+[ 2022-05-05 18:17:04,556][kfold_wrapper.log_eval_metrics] Accuracy(layer_2 - estimator_0 - 3_folds.test.predict)=69.55%
+[ 2022-05-05 18:17:05,807][kfold_wrapper.log_eval_metrics] Accuracy(layer_2 - estimator_1 - 3_folds.train_0.predict)=64.78%
+[ 2022-05-05 18:17:06,991][kfold_wrapper.log_eval_metrics] Accuracy(layer_2 - estimator_1 - 3_folds.train_1.predict)=63.71%
+[ 2022-05-05 18:17:08,269][kfold_wrapper.log_eval_metrics] Accuracy(layer_2 - estimator_1 - 3_folds.train_2.predict)=63.89%
+[ 2022-05-05 18:17:08,408][kfold_wrapper.log_eval_metrics] Accuracy(layer_2 - estimator_1 - 3_folds.train_cv.predict)=64.12%
+[ 2022-05-05 18:17:08,408][kfold_wrapper.log_eval_metrics] Accuracy(layer_2 - estimator_1 - 3_folds.test.predict)=68.05%
+[ 2022-05-05 18:17:08,408][cascade_classifier_cs.calc_accuracy] Accuracy(layer_2 - train part2 accuracy)=66.35%
+[ 2022-05-05 18:17:08,408][cascade_classifier_cs.fit_transform] ------------------------layer_2 - train accuracy 87.07142857142857
+[ 2022-05-05 18:17:08,408][cascade_classifier_cs.calc_accuracy] Accuracy(layer_2 - test part2 accuracy)=68.99%
+[ 2022-05-05 18:17:08,408][cascade_classifier_cs.fit_transform] ------------------------layer_2 - test accuracy 88.93333333333334
+[ 2022-05-05 18:17:08,427][cascade_classifier_cs.getAutoThresh] Training accuracy now is 0.6635143380109823 and accuracy part1 needs to get 0.8317571690054911 (2 times)
+[ 2022-05-05 18:17:08,430][cascade_classifier_cs.decide_thresh] #instances = 6556, num_thresh 6160, CX threshold: 0.7100000083446503
+[ 2022-05-05 18:17:08,431][cascade_classifier_cs.confidence_screening] In layer 3, train num is 6131, part decay is 0.9351738865161684
+[ 2022-05-05 18:17:08,431][cascade_classifier_cs.calc_accuracy] Accuracy(layer_2 - train.1part(425))=81.65%
+[ 2022-05-05 18:17:08,432][cascade_classifier_cs.calc_accuracy] Accuracy(layer_2 - train.2part(6131))=65.29%
+[ 2022-05-05 18:17:08,504][cascade_classifier_cs.confidence_screening_test] In layer 3, test num is 2776, part decay is 0.9628858827610128
+[ 2022-05-05 18:17:08,504][cascade_classifier_cs.calc_accuracy] Accuracy(layer_2 - test.1part(107))=85.05%
+[ 2022-05-05 18:17:08,504][cascade_classifier_cs.calc_accuracy] Accuracy(layer_2 - test.2part(2776))=68.37%
+[ 2022-05-05 18:17:08,657][cascade_classifier_cs.fit_transform] [layer=3] look_indexs=[0], X_cur_train.shape=(6131, 5004), X_cur_test.shape=(2776, 5004)
+[ 2022-05-05 18:17:11,421][kfold_wrapper.log_eval_metrics] Accuracy(layer_3 - estimator_0 - 3_folds.train_0.predict)=64.33%
+[ 2022-05-05 18:17:14,137][kfold_wrapper.log_eval_metrics] Accuracy(layer_3 - estimator_0 - 3_folds.train_1.predict)=65.36%
+[ 2022-05-05 18:17:16,923][kfold_wrapper.log_eval_metrics] Accuracy(layer_3 - estimator_0 - 3_folds.train_2.predict)=64.81%
+[ 2022-05-05 18:17:17,063][kfold_wrapper.log_eval_metrics] Accuracy(layer_3 - estimator_0 - 3_folds.train_cv.predict)=64.83%
+[ 2022-05-05 18:17:17,063][kfold_wrapper.log_eval_metrics] Accuracy(layer_3 - estimator_0 - 3_folds.test.predict)=68.73%
+[ 2022-05-05 18:17:18,200][kfold_wrapper.log_eval_metrics] Accuracy(layer_3 - estimator_1 - 3_folds.train_0.predict)=62.33%
+[ 2022-05-05 18:17:19,501][kfold_wrapper.log_eval_metrics] Accuracy(layer_3 - estimator_1 - 3_folds.train_1.predict)=65.31%
+[ 2022-05-05 18:17:20,785][kfold_wrapper.log_eval_metrics] Accuracy(layer_3 - estimator_1 - 3_folds.train_2.predict)=64.22%
+[ 2022-05-05 18:17:20,923][kfold_wrapper.log_eval_metrics] Accuracy(layer_3 - estimator_1 - 3_folds.train_cv.predict)=63.95%
+[ 2022-05-05 18:17:20,923][kfold_wrapper.log_eval_metrics] Accuracy(layer_3 - estimator_1 - 3_folds.test.predict)=68.95%
+[ 2022-05-05 18:17:20,923][cascade_classifier_cs.calc_accuracy] Accuracy(layer_3 - train part2 accuracy)=65.58%
+[ 2022-05-05 18:17:20,923][cascade_classifier_cs.fit_transform] ------------------------layer_3 - train accuracy 87.12285714285714
+[ 2022-05-05 18:17:20,923][cascade_classifier_cs.calc_accuracy] Accuracy(layer_3 - test part2 accuracy)=68.95%
+[ 2022-05-05 18:17:20,924][cascade_classifier_cs.fit_transform] ------------------------layer_3 - test accuracy 89.04
+[ 2022-05-05 18:17:20,941][cascade_classifier_cs.getAutoThresh] Training accuracy now is 0.6558473332245963 and accuracy part1 needs to get 0.8279236666122982 (2 times)
+[ 2022-05-05 18:17:20,945][cascade_classifier_cs.decide_thresh] #instances = 6131, num_thresh 6118, CX threshold: 0.7999999821186066
+[ 2022-05-05 18:17:20,945][cascade_classifier_cs.confidence_screening] In layer 4, train num is 6115, part decay is 0.9973903115315609
+[ 2022-05-05 18:17:20,946][cascade_classifier_cs.calc_accuracy] Accuracy(layer_3 - train.1part(16))=68.75%
+[ 2022-05-05 18:17:20,946][cascade_classifier_cs.calc_accuracy] Accuracy(layer_3 - train.2part(6115))=65.58%
+[ 2022-05-05 18:17:21,015][cascade_classifier_cs.confidence_screening_test] In layer 4, test num is 2776, part decay is 1.0
+[ 2022-05-05 18:17:21,015][cascade_classifier_cs.calc_accuracy] Accuracy(layer_3 - test.1part(0))=0.00%
+[ 2022-05-05 18:17:21,015][cascade_classifier_cs.calc_accuracy] Accuracy(layer_3 - test.2part(2776))=68.95%
+[ 2022-05-05 18:17:21,164][cascade_classifier_cs.fit_transform] [layer=4] look_indexs=[0], X_cur_train.shape=(6115, 5004), X_cur_test.shape=(2776, 5004)
+[ 2022-05-05 18:17:23,869][kfold_wrapper.log_eval_metrics] Accuracy(layer_4 - estimator_0 - 3_folds.train_0.predict)=65.23%
+[ 2022-05-05 18:17:26,685][kfold_wrapper.log_eval_metrics] Accuracy(layer_4 - estimator_0 - 3_folds.train_1.predict)=63.98%
+[ 2022-05-05 18:17:29,445][kfold_wrapper.log_eval_metrics] Accuracy(layer_4 - estimator_0 - 3_folds.train_2.predict)=64.33%
+[ 2022-05-05 18:17:29,586][kfold_wrapper.log_eval_metrics] Accuracy(layer_4 - estimator_0 - 3_folds.train_cv.predict)=64.51%
+[ 2022-05-05 18:17:29,586][kfold_wrapper.log_eval_metrics] Accuracy(layer_4 - estimator_0 - 3_folds.test.predict)=68.91%
+[ 2022-05-05 18:17:30,780][kfold_wrapper.log_eval_metrics] Accuracy(layer_4 - estimator_1 - 3_folds.train_0.predict)=64.49%
+[ 2022-05-05 18:17:32,063][kfold_wrapper.log_eval_metrics] Accuracy(layer_4 - estimator_1 - 3_folds.train_1.predict)=64.38%
+[ 2022-05-05 18:17:33,357][kfold_wrapper.log_eval_metrics] Accuracy(layer_4 - estimator_1 - 3_folds.train_2.predict)=63.84%
+[ 2022-05-05 18:17:33,497][kfold_wrapper.log_eval_metrics] Accuracy(layer_4 - estimator_1 - 3_folds.train_cv.predict)=64.24%
+[ 2022-05-05 18:17:33,497][kfold_wrapper.log_eval_metrics] Accuracy(layer_4 - estimator_1 - 3_folds.test.predict)=69.24%
+[ 2022-05-05 18:17:33,497][cascade_classifier_cs.calc_accuracy] Accuracy(layer_4 - train part2 accuracy)=64.97%
+[ 2022-05-05 18:17:33,497][cascade_classifier_cs.fit_transform] ------------------------layer_4 - train accuracy 87.01714285714286
+[ 2022-05-05 18:17:33,498][cascade_classifier_cs.calc_accuracy] Accuracy(layer_4 - test part2 accuracy)=69.13%
+[ 2022-05-05 18:17:33,498][cascade_classifier_cs.fit_transform] ------------------------layer_4 - test accuracy 89.07333333333334
+[ 2022-05-05 18:17:33,514][cascade_classifier_cs.getAutoThresh] Training accuracy now is 0.6497138184791497 and accuracy part1 needs to get 0.8248569092395748 (2 times)
+[ 2022-05-05 18:17:33,518][cascade_classifier_cs.decide_thresh] #instances = 6115, num_thresh 6035, CX threshold: 0.7700000107288361
+[ 2022-05-05 18:17:33,518][cascade_classifier_cs.confidence_screening] In layer 5, train num is 6012, part decay is 0.9831561733442354
+[ 2022-05-05 18:17:33,518][cascade_classifier_cs.calc_accuracy] Accuracy(layer_4 - train.1part(103))=80.58%
+[ 2022-05-05 18:17:33,519][cascade_classifier_cs.calc_accuracy] Accuracy(layer_4 - train.2part(6012))=64.70%
+[ 2022-05-05 18:17:33,573][cascade_classifier_cs.confidence_screening_test] In layer 5, test num is 2766, part decay is 0.9963976945244957
+[ 2022-05-05 18:17:33,573][cascade_classifier_cs.calc_accuracy] Accuracy(layer_4 - test.1part(10))=100.00%
+[ 2022-05-05 18:17:33,573][cascade_classifier_cs.calc_accuracy] Accuracy(layer_4 - test.2part(2766))=69.02%
+[ 2022-05-05 18:17:33,726][cascade_classifier_cs.fit_transform] [layer=5] look_indexs=[0], X_cur_train.shape=(6012, 5004), X_cur_test.shape=(2766, 5004)
+[ 2022-05-05 18:17:36,609][kfold_wrapper.log_eval_metrics] Accuracy(layer_5 - estimator_0 - 3_folds.train_0.predict)=64.62%
+[ 2022-05-05 18:17:39,316][kfold_wrapper.log_eval_metrics] Accuracy(layer_5 - estimator_0 - 3_folds.train_1.predict)=63.92%
+[ 2022-05-05 18:17:42,113][kfold_wrapper.log_eval_metrics] Accuracy(layer_5 - estimator_0 - 3_folds.train_2.predict)=64.12%
+[ 2022-05-05 18:17:42,253][kfold_wrapper.log_eval_metrics] Accuracy(layer_5 - estimator_0 - 3_folds.train_cv.predict)=64.22%
+[ 2022-05-05 18:17:42,253][kfold_wrapper.log_eval_metrics] Accuracy(layer_5 - estimator_0 - 3_folds.test.predict)=69.34%
+[ 2022-05-05 18:17:43,388][kfold_wrapper.log_eval_metrics] Accuracy(layer_5 - estimator_1 - 3_folds.train_0.predict)=63.62%
+[ 2022-05-05 18:17:44,565][kfold_wrapper.log_eval_metrics] Accuracy(layer_5 - estimator_1 - 3_folds.train_1.predict)=64.47%
+[ 2022-05-05 18:17:45,870][kfold_wrapper.log_eval_metrics] Accuracy(layer_5 - estimator_1 - 3_folds.train_2.predict)=62.72%
+[ 2022-05-05 18:17:46,008][kfold_wrapper.log_eval_metrics] Accuracy(layer_5 - estimator_1 - 3_folds.train_cv.predict)=63.61%
+[ 2022-05-05 18:17:46,008][kfold_wrapper.log_eval_metrics] Accuracy(layer_5 - estimator_1 - 3_folds.test.predict)=68.98%
+[ 2022-05-05 18:17:46,008][cascade_classifier_cs.calc_accuracy] Accuracy(layer_5 - train part2 accuracy)=64.99%
+[ 2022-05-05 18:17:46,009][cascade_classifier_cs.fit_transform] ------------------------layer_5 - train accuracy 87.06571428571428
+[ 2022-05-05 18:17:46,009][cascade_classifier_cs.calc_accuracy] Accuracy(layer_5 - test part2 accuracy)=69.20%
+[ 2022-05-05 18:17:46,009][cascade_classifier_cs.fit_transform] ------------------------layer_5 - test accuracy 89.10666666666667
+[ 2022-05-05 18:17:46,009][cascade_classifier_cs.fit_transform] [Result][Optimal Level Detected] opt_layer_num=4, accuracy_train=87.12%, accuracy_test=89.04%

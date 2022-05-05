@@ -1,0 +1,7 @@
+[ 2022-05-02 19:22:40,745][cascade_classifier_thresh.fit_transform] X_groups_train.shape=[(35000, 5000)],y_train.shape=(35000,),X_groups_test.shape=[(15000, 5000)],y_test.shape=(15000,)
+[ 2022-05-02 19:22:43,090][cascade_classifier_thresh.fit_transform] group_dims=[5000]
+[ 2022-05-02 19:22:43,090][cascade_classifier_thresh.fit_transform] group_starts=[0]
+[ 2022-05-02 19:22:43,090][cascade_classifier_thresh.fit_transform] group_ends=[5000]
+[ 2022-05-02 19:22:43,090][cascade_classifier_thresh.fit_transform] X_train.shape=(35000, 5000),X_test.shape=(15000, 5000)
+[ 2022-05-02 19:22:43,465][cascade_classifier_thresh.fit_transform] [layer=0] look_indexs=[0], X_cur_train.shape=(35000, 5000), X_cur_test.shape=(15000, 5000)
+[ 2022-05-02 19:22:59,721][kfold_wrapper.log_eval_metrics] Accuracy(layer_0 - estimator_0 - 3_folds.train_0.predict)=84.41%

@@ -64,22 +64,32 @@ for tb = 1:BatchSize:Train_Num  %iterations
     
     [~,~,~,~,~,Vali_Weight_F1,Vali_Acc,Vali_Kappa,~,Vali_Loss] = SFNN_Forward(ValidateX_Norm,ValidateY_onehot,ValidateY,...
                                                    W1_Para,b1_Para,W2_Para,b2_Para,s,lambda,LossFun,FL_Weight,FL_Adjust);
-    Weight_F1 = [Weight_F1;Vali_Weight_F1];
-    Acc = [Acc;Vali_Acc];
-    Kappa = [Kappa;Vali_Kappa];
-    Loss = [Loss;Vali_Loss];
-    Para_Batch = [Para_Batch;{W1,b1,W2,b2}]; %记录每次epochs对应的参数
+%     Weight_F1 = [Weight_F1;Vali_Weight_F1];
+%     Acc = [Acc;Vali_Acc];
+%     Kappa = [Kappa;Vali_Kappa];
+%     Loss = [Loss;Vali_Loss];
+%     Para_Batch = [Para_Batch;{W1,b1,W2,b2}]; %记录每次epochs对应的参数
 end
 
-[Acc_Batch,Acc_Index] = max(Acc);
-WeightF1_Batch = Weight_F1(Acc_Index);
-Kappa_Batch = Kappa(Acc_Index);
-Loss_Batch = Loss(Acc_Index);
-Para = Para_Batch(Acc_Index,:);
+Acc_Batch = Vali_Acc;
+WeightF1_Batch = Vali_Weight_F1;
+Kappa_Batch = Vali_Kappa;
+Loss_Batch = Vali_Loss;
+Para = {W1,b1,W2,b2};
 W1_Batch = Para{1};
 b1_Batch = Para{2};
 W2_Batch = Para{3};
 b2_Batch = Para{4};
+
+% [Acc_Batch,Acc_Index] = max(Acc);
+% WeightF1_Batch = Weight_F1(Acc_Index);
+% Kappa_Batch = Kappa(Acc_Index);
+% Loss_Batch = Loss(Acc_Index);
+% Para = Para_Batch(Acc_Index,:);
+% W1_Batch = Para{1};
+% b1_Batch = Para{2};
+% W2_Batch = Para{3};
+% b2_Batch = Para{4};
 clear Weight_F1 Acc  Kappa Loss Para_Batch
 
 

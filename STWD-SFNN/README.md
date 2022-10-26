@@ -12,7 +12,7 @@ The three-way decisions strategy was employed to construct neural network topolo
 #### Algorithms:
 [STWD-SFNN and all competitive algorithms](https://github.com/wuc567/Machine-learning/tree/main/STWD-SFNN/algorithms)
 
-####How to run the codes of algorithms?
+#### How to run the codes of algorithms?
 
 Taking STWD-SFNN algorithm as an example. 
 Step 1 : Run the two subfiles run_stwd.m and run_twd.m of the Run-Paras folder to save the random number required by the STWD-SFNN model. 

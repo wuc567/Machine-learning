@@ -1,18 +1,18 @@
-%ÔÚÖ¸¶¨¼¤»îº¯Êý,²¢¸ø¶¨È¨ÖØW1ºÍÆ«ÖÃb1ÏÂ,¼ÆËãÒþ²ãµÄ¼¤»îº¯ÊýÖµ,Í¬Ê±Êä³ö¼¤»îº¯Êý¹ØÓÚz=w1*X+b1µÄÆ«µ¼Êý
+%åœ¨æŒ‡å®šæ¿€æ´»å‡½æ•°,å¹¶ç»™å®šæƒé‡W1å’Œåç½®b1ä¸‹,è®¡ç®—éšå±‚çš„æ¿€æ´»å‡½æ•°å€¼,åŒæ—¶è¾“å‡ºæ¿€æ´»å‡½æ•°å…³äºŽz=w1*X+b1çš„åå¯¼æ•°
 
-%s£º¼¤»îº¯ÊýµÄÀà±ð,Ç°7¸öÊÇReluº¯Êý,ºó4¸öÊÇtanhº¯Êý
-%X£ºÊäÈëÊý¾Ý¼¯,size=ÌØÕ÷Êý*Ñù±¾Á¿
-%w1£ºÈ¨ÖØ,size=Òþ½ÚÊý*ÌØÕ÷Êý
-%b1£ºÆ«ÖÃ,size=Òþ½ÚÊý*Ñù±¾Á¿
+%sï¼šæ¿€æ´»å‡½æ•°çš„ç±»åˆ«,å‰7ä¸ªæ˜¯Reluå‡½æ•°,åŽ4ä¸ªæ˜¯tanhå‡½æ•°
+%Xï¼šè¾“å…¥æ•°æ®é›†,size=ç‰¹å¾æ•°*æ ·æœ¬é‡
+%w1ï¼šæƒé‡,size=éšèŠ‚æ•°*ç‰¹å¾æ•°
+%b1ï¼šåç½®,size=éšèŠ‚æ•°*æ ·æœ¬é‡
 
-%Activate_Value£º¼¤»îº¯Êý×÷ÓÃºóµÄ¼¤»îÖµ,size=Òþ½ÚÊý*Ñù±¾Á¿
-%Derivative_Activate_Value_Derivative_z:¼¤»îº¯Êý¶ÔzµÄÆ«µ¼Êý,size=Òþ½ÚÊý*Ñù±¾Á¿,ÆäÖÐz=w1*X+b1
-%e.g.ÉèÖÃK=1,zµÄsize(K,304)=(1,304),Activate_ValueµÄsize(K,304)=(1,304),Der_Activate_Der_zµÄsize(K,304)=(1,304)
+%Activate_Valueï¼šæ¿€æ´»å‡½æ•°ä½œç”¨åŽçš„æ¿€æ´»å€¼,size=éšèŠ‚æ•°*æ ·æœ¬é‡
+%Derivative_Activate_Value_Derivative_z:æ¿€æ´»å‡½æ•°å¯¹zçš„åå¯¼æ•°,size=éšèŠ‚æ•°*æ ·æœ¬é‡,å…¶ä¸­z=w1*X+b1
+%e.g.è®¾ç½®K=1,zçš„size(K,304)=(1,304),Activate_Valueçš„size(K,304)=(1,304),Der_Activate_Der_zçš„size(K,304)=(1,304)
 
 function [Activate_Value,Der_Activate_Der_z]=Activate_Function(X,w1,b1,s)
-z=w1*X+b1; %size=Òþ½ÚÊý*Ñù±¾Á¿
+z=w1*X+b1; %size=éšèŠ‚æ•°*æ ·æœ¬é‡
 [r,c]=size(z);
-if s==1 %Reluº¯Êý
+if s==1 %Reluå‡½æ•°
     for i=1:r
         for j=1:c
             if z(i,j)>0
@@ -24,8 +24,8 @@ if s==1 %Reluº¯Êý
             end
         end
     end
-elseif s==2 %Noisy Reluº¯Êý
-    n=normrnd(0,std(z),1,1);%Éú³Ér*c´óÐ¡µÄ(0,std(z)±ê×¼²î)·¶Î§ÄÚµÄ·ûºÏÕýÌ¬·Ö²¼µÄËæ»ú¾ØÕó
+elseif s==2 %Noisy Reluå‡½æ•°
+    n=normrnd(0,std(z),1,1);%ç”Ÿæˆr*cå¤§å°çš„(0,std(z)æ ‡å‡†å·®)èŒƒå›´å†…çš„ç¬¦åˆæ­£æ€åˆ†å¸ƒçš„éšæœºçŸ©é˜µ
     for i=1:r
         for j=1:c
             if z(i,j)>0             
@@ -37,7 +37,7 @@ elseif s==2 %Noisy Reluº¯Êý
             end
         end
     end 
-elseif s==3  %Leaky Reluº¯Êý,Éñ¾­ÍøÂç²»Ñ§Ï°aÖµ
+elseif s==3  %Leaky Reluå‡½æ•°,ç¥žç»ç½‘ç»œä¸å­¦ä¹ aå€¼
     for i=1:r
         for j=1:c
             if z(i,j)>0
@@ -50,33 +50,33 @@ elseif s==3  %Leaky Reluº¯Êý,Éñ¾­ÍøÂç²»Ñ§Ï°aÖµ
             end
         end
     end
-elseif s==4  %PReluº¯Êý
+elseif s==4  %PReluå‡½æ•°
     for i=1:r
         for j=1:c
             if z(i,j)>0
                 Activate_Value(i,j)=z(i,j);
                 Der_Activate_Der_z(i,j)=1;
             else
-                a=rand(1,1);%Ëæ»úÉú³Ér*c´óÐ¡ ÔÚ(0,1)Ö®¼äµÄËæ»úÊý¾ØÕó,µ«a²»ÊÇ¹Ì¶¨ÏÂÀ´µÄ,¶øÊÇÑ§Ï°µÃÀ´µÄ
+                a=rand(1,1);%éšæœºç”Ÿæˆr*cå¤§å° åœ¨(0,1)ä¹‹é—´çš„éšæœºæ•°çŸ©é˜µ,ä½†aä¸æ˜¯å›ºå®šä¸‹æ¥çš„,è€Œæ˜¯å­¦ä¹ å¾—æ¥çš„
                 Activate_Value(i,j)=a.*z(i,j);
                 Der_Activate_Der_z(i,j)=a(i,j);
             end
         end
     end
-elseif s==5 %RReluº¯Êý
+elseif s==5 %RReluå‡½æ•°
     for i=1:r
         for j=1:c
             if z(i,j)>0
                 Activate_Value(i,j)=z(i,j);
                 Der_Activate_Der_z(i,j)=1;
             else
-                a=normrnd(0,1,1,1);%Éú³Ér*c´óÐ¡µÄ(0,1)·¶Î§ÄÚµÄ·ûºÏÕýÌ¬·Ö²¼µÄËæ»úÊý¾ØÕó
+                a=normrnd(0,1,1,1);%ç”Ÿæˆr*cå¤§å°çš„(0,1)èŒƒå›´å†…çš„ç¬¦åˆæ­£æ€åˆ†å¸ƒçš„éšæœºæ•°çŸ©é˜µ
                 Activate_Value(i,j)=a.*z(i,j); 
                 Der_Activate_Der_z(i,j)=a(i,j);
             end
         end
     end
-elseif s==6 %Eluº¯Êý,Éñ¾­ÍøÂç²»Ñ§Ï°aÖµ
+elseif s==6 %Eluå‡½æ•°,ç¥žç»ç½‘ç»œä¸å­¦ä¹ aå€¼
     for i=1:r
         for j=1:c
             if z(i,j)>0
@@ -89,7 +89,7 @@ elseif s==6 %Eluº¯Êý,Éñ¾­ÍøÂç²»Ñ§Ï°aÖµ
             end
         end
     end
-elseif s==7 %Seluº¯Êý
+elseif s==7 %Seluå‡½æ•°
     lambda=1.0507009873554804934193349852946;
     a=1.6732632423543772848170429916717;
     for i=1:r
@@ -104,32 +104,32 @@ elseif s==7 %Seluº¯Êý
             end
         end
     end 
-elseif s==8 %tanhº¯Êý
+elseif s==8 %tanhå‡½æ•°
     t1=exp(z); 
     t2=exp(-z); 
     Activate_Value=(t1-t2)./(t1+t2); 
     Der_Activate_Der_z=1-Activate_Value.^2;
-elseif s==9 %Geluº¯Êý
+elseif s==9 %Geluå‡½æ•°
     tmp1=0.044715.*z.^3+z;
     tmp2=sqrt(2/pi).*(tmp1);
     t1=exp(tmp2);
     t2=exp(-tmp2); 
-    tanh1=(t1-t2)./(t1+t2);  %tanhº¯Êý
-    Activate_Value=0.5.*z.*(1+tanh1); %¶ÔÓ¦ÔªËØÏà³Ë
-    %%%%%%%%%%% WolfarmAlphaÎ¢·Ö %%%%%%%%%%
+    tanh1=(t1-t2)./(t1+t2);  %tanhå‡½æ•°
+    Activate_Value=0.5.*z.*(1+tanh1); %å¯¹åº”å…ƒç´ ç›¸ä¹˜
+    %%%%%%%%%%% WolfarmAlphaå¾®åˆ† %%%%%%%%%%
     tmp3=0.0356774.*z.^3+0.797885.*z;
     t3=exp(tmp3);
     t4=exp(-tmp3); 
-    tanh2=(t3-t4)./(t3+t4); %tanhº¯Êý
-    sech1=2./(t3+t4);       %sechº¯Êý
+    tanh2=(t3-t4)./(t3+t4); %tanhå‡½æ•°
+    sech1=2./(t3+t4);       %sechå‡½æ•°
     sech2=sech1.^2;
     tmp4=0.053516.*z.^3+0.398942.*z;
     Der_Activate_Der_z=0.5.*tanh2+tmp4.*sech2+0.5;
-elseif s==10 %Sigmoidº¯Êý
+elseif s==10 %Sigmoidå‡½æ•°
     t=exp(-z); 
     Activate_Value=1./(1+t); 
-    Der_Activate_Der_z=Activate_Value.*(1-Activate_Value);%¶ÔÓ¦ÔªËØÏà³Ë
-elseif s==11 %Swishº¯Êý=z*sigmoid(beta*z)
+    Der_Activate_Der_z=Activate_Value.*(1-Activate_Value);%å¯¹åº”å…ƒç´ ç›¸ä¹˜
+elseif s==11 %Swishå‡½æ•°=z*sigmoid(beta*z)
     beta=2;
     t1=exp(-beta.*z); 
     t2=1./(1+t1);  %sigmoid(beta*z)

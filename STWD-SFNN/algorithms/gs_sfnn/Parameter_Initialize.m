@@ -1,20 +1,20 @@
 function [Weight_1,bias_1,Weight_2,bias_2]=Parameter_Initialize(s,t,K,InputDimension,ClassNum)
-%K=1; %K£ºÔö¼ÓµÄÈ¨ÖØĞĞÊı,¼´Ôö¼ÓµÄÒş½ÚÊıÄ¿
+%K=1; %Kï¼šå¢åŠ çš„æƒé‡è¡Œæ•°,å³å¢åŠ çš„éšèŠ‚æ•°ç›®
 if s<8 
     if t==1 
-        Weight_1=(rand(K,InputDimension)*2-1)*sqrt(6/InputDimension);%Reluº¯Êı,·ş´Ó¾ùÔÈ·Ö²¼,ÊäÈë²ãµ½Òş²ã
-        Weight_2=(rand(ClassNum,K)*2-1)*sqrt(6/K);%Reluº¯Êı,·ş´Ó¾ùÔÈ·Ö²¼,Òş²ãµ½Êä³ö²ã
+        Weight_1=(rand(K,InputDimension)*2-1)*sqrt(6/InputDimension);%Reluå‡½æ•°,æœä»å‡åŒ€åˆ†å¸ƒ,è¾“å…¥å±‚åˆ°éšå±‚
+        Weight_2=(rand(ClassNum,K)*2-1)*sqrt(6/K);%Reluå‡½æ•°,æœä»å‡åŒ€åˆ†å¸ƒ,éšå±‚åˆ°è¾“å‡ºå±‚
     else
-        Weight_1=(normrnd(0,sqrt(2/InputDimension),[K,InputDimension]));%Reluº¯Êı,·ş´ÓÕıÌ¬·Ö²¼,ÊäÈë²ãµ½Òş²ã
-        Weight_2=(normrnd(0,sqrt(2/K),[ClassNum,K]));%Reluº¯Êı,·ş´ÓÕıÌ¬·Ö²¼,Òş²ãµ½Êä³ö²ã
+        Weight_1=(normrnd(0,sqrt(2/InputDimension),[K,InputDimension]));%Reluå‡½æ•°,æœä»æ­£æ€åˆ†å¸ƒ,è¾“å…¥å±‚åˆ°éšå±‚
+        Weight_2=(normrnd(0,sqrt(2/K),[ClassNum,K]));%Reluå‡½æ•°,æœä»æ­£æ€åˆ†å¸ƒ,éšå±‚åˆ°è¾“å‡ºå±‚
     end
 else
     if t==1
-        Weight_1=(rand(K,InputDimension)*2-1)*sqrt(6/(InputDimension+K));%tanhº¯Êı,·ş´Ó¾ùÔÈ·Ö²¼,ÊäÈë²ãµ½Òş²ã
-        Weight_2=(rand(ClassNum,K)*2-1)*sqrt(6/(K+ClassNum));%tanhº¯Êı,·ş´Ó¾ùÔÈ·Ö²¼,Òş²ãµ½Êä³ö²ã
+        Weight_1=(rand(K,InputDimension)*2-1)*sqrt(6/(InputDimension+K));%tanhå‡½æ•°,æœä»å‡åŒ€åˆ†å¸ƒ,è¾“å…¥å±‚åˆ°éšå±‚
+        Weight_2=(rand(ClassNum,K)*2-1)*sqrt(6/(K+ClassNum));%tanhå‡½æ•°,æœä»å‡åŒ€åˆ†å¸ƒ,éšå±‚åˆ°è¾“å‡ºå±‚
     else
-        Weight_1=(normrnd(0,sqrt(2/(InputDimension+K)),[K,InputDimension]));%tanhº¯Êı,·ş´ÓÕıÌ¬·Ö²¼,ÊäÈë²ãµ½Òş²ã
-        Weight_2=(normrnd(0,sqrt(2/(K+ClassNum)),[ClassNum,K]));%tanhº¯Êı,·ş´ÓÕıÌ¬·Ö²¼,Òş²ãµ½Êä³ö²ã
+        Weight_1=(normrnd(0,sqrt(2/(InputDimension+K)),[K,InputDimension]));%tanhå‡½æ•°,æœä»æ­£æ€åˆ†å¸ƒ,è¾“å…¥å±‚åˆ°éšå±‚
+        Weight_2=(normrnd(0,sqrt(2/(K+ClassNum)),[ClassNum,K]));%tanhå‡½æ•°,æœä»æ­£æ€åˆ†å¸ƒ,éšå±‚åˆ°è¾“å‡ºå±‚
     end
 end
 bias_1 = rand(K,1)*0.01;

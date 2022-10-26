@@ -1,24 +1,24 @@
-% X_NormµÄsize(13,8000)
-% Y_onehotµÄsize(2,8000)
-% YµÄsize(8000,1)
+% X_Normçš„size(13,8000)
+% Y_onehotçš„size(2,8000)
+% Yçš„size(8000,1)
 function [Act_Value,Der_Act_Der_z,Y_logits,Y_prob,Y_hat,Weight_F1,Acc,Kappa,LossFun_Error,LossFun_Value]=SFNN_Forward(X_Norm,Y_onehot,Y,...
                                                                               W1,b1,W2,b2,s,lambda,LossFun,FL_Weight,FL_Adjust)
-[Act_Value,Der_Act_Der_z]=Activate_Function(X_Norm,W1,b1,s); %¼¤»îº¯Êı,Êä³öµÄsize(1,8000)
-Y_logits = W2 * Act_Value + b2;             % Êä³ö²ãµÄÊä³öÖµ,size=(Àà±ğÊı,Ñù±¾Á¿)
-Y_logits_max = Y_logits-repmat(max(Y_logits),[size(Y_logits,1),1]); % ¼õÈ¥¸ÃÁĞµÄ×î´óÖµ,±ÜÃâsoftmaxÒç³ö
+[Act_Value,Der_Act_Der_z]=Activate_Function(X_Norm,W1,b1,s); %æ¿€æ´»å‡½æ•°,è¾“å‡ºçš„size(1,8000)
+Y_logits = W2 * Act_Value + b2;             % è¾“å‡ºå±‚çš„è¾“å‡ºå€¼,size=(ç±»åˆ«æ•°,æ ·æœ¬é‡)
+Y_logits_max = Y_logits-repmat(max(Y_logits),[size(Y_logits,1),1]); % å‡å»è¯¥åˆ—çš„æœ€å¤§å€¼,é¿å…softmaxæº¢å‡º
 Y_logits_exp = exp(Y_logits_max);
-Y_prob = bsxfun(@rdivide,Y_logits_exp,sum(Y_logits_exp,1)); % ¾­softmax±ä»»ºóµÄ¸ÅÂÊ·Ö²¼,size=(Àà±ğÊı,Ñù±¾Á¿)
-Y_pred = logical(Y_prob==max(Y_prob));  % argmaxºóµÄÍøÂçÊä³ö,size=(Àà±ğÊı,Ñù±¾Á¿)
-Y_hat = vec2ind(Y_pred)';               % ½«ÈÈ±àÂë×ª»»³É±êÇ©,Y_hatµÄsize=(Ñù±¾Á¿,1)
+Y_prob = bsxfun(@rdivide,Y_logits_exp,sum(Y_logits_exp,1)); % ç»softmaxå˜æ¢åçš„æ¦‚ç‡åˆ†å¸ƒ,size=(ç±»åˆ«æ•°,æ ·æœ¬é‡)
+Y_pred = logical(Y_prob==max(Y_prob));  % argmaxåçš„ç½‘ç»œè¾“å‡º,size=(ç±»åˆ«æ•°,æ ·æœ¬é‡)
+Y_hat = vec2ind(Y_pred)';               % å°†çƒ­ç¼–ç è½¬æ¢æˆæ ‡ç­¾,Y_hatçš„size=(æ ·æœ¬é‡,1)
 [Weight_F1,Acc,Kappa]=WeightF1_Score(Y,Y_hat);
 
 if LossFun==1  
-    %CE½»²æìØËğÊ§º¯Êı 
-    LossFun_Error = -sum(Y_onehot.*log(Y_prob+10^(-12)),1); %LossFun_ErrorµÄsize=(1,Ñù±¾Á¿), %sum(~,1)µÄ1±íÊ¾¶ÔÁĞÇóºÍ
+    %CEäº¤å‰ç†µæŸå¤±å‡½æ•° 
+    LossFun_Error = -sum(Y_onehot.*log(Y_prob+10^(-12)),1); %LossFun_Errorçš„size=(1,æ ·æœ¬é‡), %sum(~,1)çš„1è¡¨ç¤ºå¯¹åˆ—æ±‚å’Œ
     LossFun_Value = 1/size(X_Norm,2).*sum(LossFun_Error)+lambda/2*(sqrt(sum(sum(W1.^2)))+sqrt(sum(sum(W2.^2))));       
 else
-    %FL¾Û½¹ËğÊ§º¯Êı
-    LossFun_Error = -sum(FL_Weight.*(1-Y_prob).^FL_Adjust.*Y_onehot.*log(Y_prob+10^(-12)),1);  %size=(1,Ñù±¾Á¿)
+    %FLèšç„¦æŸå¤±å‡½æ•°
+    LossFun_Error = -sum(FL_Weight.*(1-Y_prob).^FL_Adjust.*Y_onehot.*log(Y_prob+10^(-12)),1);  %size=(1,æ ·æœ¬é‡)
     LossFun_Value = 1/size(X_Norm,2).*sum(LossFun_Error)+lambda/2*(sqrt(sum(sum(W1.^2)))+sqrt(sum(sum(W2.^2)))); 
 end
 
@@ -29,8 +29,8 @@ if size_Y == 0
 end
 
 [ConMat,~] = confusionmat(Y,Y_hat);
-sum_column = sum(ConMat,1); % ÁĞºÍ
-sum_row = sum(ConMat,2);    % ĞĞºÍ
+sum_column = sum(ConMat,1); % åˆ—å’Œ
+sum_row = sum(ConMat,2);    % è¡Œå’Œ
 
 diag_ConMat = diag(ConMat);
 Acc = sum(diag_ConMat)/size_Y;
@@ -38,14 +38,14 @@ Acc = sum(diag_ConMat)/size_Y;
 pe = sum_column * sum_row/(size_Y^2);
 Kappa = (Acc-pe)/(1-pe);
 
-if any(sum_column==0) || any(sum_row==0) % ÅĞ¶ÏÊÇ·ñÓĞ0Öµ
+if any(sum_column==0) || any(sum_row==0) % åˆ¤æ–­æ˜¯å¦æœ‰0å€¼
     Weight_F1 = 0;
 else
     P = diag_ConMat'./sum_column;
     R = diag_ConMat'./sum_row';
-    F1_score = 2*P.*R./(P+R);   % ¼ÆËãÃ¿¸öÀà±ğÏÂ¶ÔÓ¦µÄ F1_Scores
+    F1_score = 2*P.*R./(P+R);   % è®¡ç®—æ¯ä¸ªç±»åˆ«ä¸‹å¯¹åº”çš„ F1_Scores
     
-    F1_nan = isnan(F1_score);   % ÅĞ¶ÏÊÇ·ñÓĞ¿ÕÖµ
+    F1_nan = isnan(F1_score);   % åˆ¤æ–­æ˜¯å¦æœ‰ç©ºå€¼
     if ismember(1,F1_nan)
         [F1_nan_row,F1_nan_column] = find(F1_nan==1);
         F1_score(F1_nan_row,F1_nan_column)=0;
@@ -55,7 +55,7 @@ else
     Y_unique = unique(union(unique(Y),unique(Y_hat)));
     for r = 1:length(Y_unique)
         Y_unique_num = sum(Y==Y_unique(r));
-        count = [count,Y_unique_num];  %Ã¿¸öÀà±ğµÄÊıÁ¿,1*N
+        count = [count,Y_unique_num];  %æ¯ä¸ªç±»åˆ«çš„æ•°é‡,1*N
     end
     Weight_F1 = sum(count.*F1_score)/size_Y;  
 end

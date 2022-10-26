@@ -1,8 +1,12 @@
-function Test_Result =ContrastAlgorithm_K123(Train,Validate,Test,Para_Init,alpha,BatchSize,lambda)
-                                   
-%初始化神经网络的权重和偏置
-[W1,b1,W2,b2]=Parameter_Initialize(Para_Init.s,Para_Init.t,Para_Init.Hidden,...
-                                   Para_Init.data_c,Para_Init.ClassNum);
+function Test_Result = ContrastAlgorithm_K123(Train,Validate,Test,Para_Init,alpha,BatchSize,lambda)
+
+tic
+
+% 使用预定的第 hidden_step 行的权重和偏置
+W1 = Para_Init.Weight_1(1:Para_Init.Hidden, :);  % 50 * 11500
+b1 = Para_Init.bias_1(1:Para_Init.Hidden, :);    % 50 * 1
+W2 = Para_Init.Weight_2(:, 1:Para_Init.Hidden);  % 2 * 50
+b2 = Para_Init.bias_2;                            % 2 * 1
 
 %StepOne：前向传播
 [F_Act_Value,F_Der_z,~,F_Y_prob,~,~,~,~,~,~]=SFNN_Forward(Train.X_Norm',Train.Y_onehot',Train.Y,...
@@ -64,17 +68,18 @@ Train_Loss=TrainLoss(TrainAcc_Index);
 Train_WeightF1=TrainF1(TrainAcc_Index);
 Train_Kappa=TrainKappa(TrainAcc_Index);
 Train_Result = [Train_WeightF1,Train_Acc,Train_Kappa,Train_Loss];
+toc
+train_time = toc;
 
 Para=Para_Train(TrainAcc_Index,:);
 clear ValidateF1 ValidateAcc ValidateKappa ValidateLoss TrainF1 TrainAcc TrainKappa TrainLoss Para_Train
 
+tic
 [~,~,~,~,~,Test_WeightF1,Test_Acc,Test_Kappa,~,Test_Loss]=SFNN_Forward(Test.X_Norm',Test.Y_onehot',Test.Y,...
                       Para{1},Para{2},Para{3},Para{4},Para_Init.s,lambda,Para_Init.LossFun,Para_Init.FL_Weight,Para_Init.FL_Adjust);
-Test_Result = [Test_Acc,Test_WeightF1,Test_Kappa,Test_Loss,Para_Init.Hidden];
-
-% Reault_SFNN_index = [Train_Result;Test_Result];
-% xlswrite('E:\4—Program\2—MatalabCode\V11—TWDSFNN',Reault_SFNN_index)
-
+toc
+test_time = toc;
+Test_Result = [Train_Acc,Train_WeightF1, Test_Acc,Test_WeightF1, Para_Init.Hidden, train_time, test_time];
 end
                                         
              

@@ -1,23 +1,8 @@
-clear
-clc
-warning off
-set(0,'DefaultFigureVisible', 'off')
-
-load D:\Cheng_jiayou\Revise_PSO_SFNN\PSO_SFNN_v1\data_is\BM.mat
-Para_Init.data_slide = 1;    % 需要划分测试集
-Para_Init.Data_Type = 6;     % 全部归一化处理
-Para_Init.TWD_cases = 1;     % 讨论 TWD 参数不同取值下的情形
-
-% 构建需要优化的参数列表
-alpha = [0.1, 0.01];     % 梯度下降的学习率 ,0.01,0.001
-BatchSize = [128, 256]; % 随机梯度下降的批大小 ,128,256
-lambda = [1];        % 损失函数的正则项系数,0.1,1,10
-[alpha_1,BatchSize_1,lambda_1] = ndgrid(alpha,BatchSize,lambda);
-Para_Optimize.alpha = reshape(alpha_1,1,[]);
-Para_Optimize.BatchSize = reshape(BatchSize_1,1,[]);
-Para_Optimize.lambda = reshape(lambda_1,1,[]); 
-Para_Optimize.list = [Para_Optimize.alpha;Para_Optimize.BatchSize;Para_Optimize.lambda]'; % 参数列表,48*3
-
+function [Test_Result, Test_Result_Mean,Test_Result_SE] = Run_PSO_10folds(data, label, Para_Init, indices)
+file_name_per = Para_Init.file_name_per;
+file_path_save = Para_Init.file_path_save;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Para_Init.self_c1 = 2;
 Para_Init.self_c2 = 2;
 Para_Init.self_min_h = 0;                         % 隐藏层结点数目的最大值
@@ -32,30 +17,49 @@ Para_Init.self_pbest = zeros(Para_Init.self_pN, Para_Init.self_dim);  % 每个个体
 Para_Init.self_gfit  = 0;                                   % 全局最佳适应值,即最小的err
 Para_Init.self_gbest = zeros(1, Para_Init.self_dim);        % 个体经历的全局最佳位置,即最小的err对应的最小的x
 
-Para_Init.s = 10;   % 激活函数类型,前7个是Relu函数,后4个是tanh函数
-Para_Init.t = 2;   % 数据的分布类型,1是服从均匀分布,否则服从正态分布
-Para_Init.p = 1;   % 不同的调参方法,1是SGD+Momentum,2是Adam,3是不带修正项的AMSgrad
-Para_Init.Acc_init = 0.99; % 初始化的准确率
+% 构建需要优化的参数列表
+% alpha =  [0.1,0.01,0.001];      % 梯度下降的学习率
+% BatchSize = [512,1024];        % 随机梯度下降的批大小
+% lambda = [0.1,1,10];         % 损失函数的正则项系数
+alpha =  0.1; %[0.1,0.01,0.001];      % 梯度下降的学习率
+BatchSize = 512; %[512,1024];        % 随机梯度下降的批大小
+lambda = 0.1; %[0.1,1,10];         % 损失函数的正则项系数
+[alpha_1,BatchSize_1,lambda_1] = ndgrid(alpha,BatchSize,lambda);
+Para_Optimize.alpha = reshape(alpha_1,1,[]);
+Para_Optimize.BatchSize = reshape(BatchSize_1,1,[]);
+Para_Optimize.lambda = reshape(lambda_1,1,[]); 
+Para_Optimize.list = [Para_Optimize.alpha;Para_Optimize.BatchSize;Para_Optimize.lambda]'; % 参数列表,48*3
+
+% 初始化超参数
+Para_Init.p = 1;   % 不同的调参方法,1是Adam,2是SGD+Momentum,3是不带修正项的AMSgrad
+Para_Init.Acc_init = 0.9; % 初始化的准确率
 Para_Init.Loss_init = 1;  % 初始化的损失值
-Para_Init.LossFun = 2;   % 损失函数类型,1是CE交叉熵损失函数,2是FL聚焦损失函数
-Para_Init.FL_Adjust = 2; % FL聚焦损失函数的调整因子
-Para_Init.Batch_epochs = 50; % 批大小的迭代次数
+Para_Init.LossFun = 2;    % 损失函数类型,1是CE交叉熵损失函数,2是FL聚焦损失函数
+Para_Init.FL_Adjust = 2;  % FL聚焦损失函数的调整因子
+Para_Init.Batch_epochs = 200; % 批大小的迭代次数
+Para_Init.Data_epochs = 10;   % 数据的迭代次数
+Para_Init.TWD_ClusterNum = 5;  % 离散化过程的簇类数目
+Para_Init.TWD_sigma = 2;
+Para_Init.TWD_lambda_pn = 0.5;  
+Para_Init.Hidden_step = 1;   % 每次叠加一个
+Para_Init.Train_num = 1;     % 隐层节点数目
+Para_Init.Hidden_nodes_max = 20;
+Para_Init.TWD_cases = 2;     % 讨论 TWD 参数不同取值下的情形
 Para_Init.data_r = size(data,1); % 数据集的样本量
 Para_Init.data_c = size(data,2); % 数据集的特征数
 Para_Init.ClassNum = numel(unique(label));  % 数据集的类别数目
 label_onehot = full(ind2vec(label',Para_Init.ClassNum))'; % one-hot
-Para_Init.folds = 10;   % 数据的10折交叉验证
+clear TWD_threshold_pair TWD_alpha_init  TWD_beta_init TWD_gamma_init alpha BatchSize  alpha_1 BatchSize_1 lambda_1
 
 % 交叉验证
-indices = crossvalind('Kfold',Para_Init.data_r,Para_Init.folds);
-Test_Result = [];
-for k = 1:Para_Init.folds 
+Test_Result=[];
+for k=1:10 %Para_Init.Data_epochs 
     fprintf('数据的交叉验证次数=%d\n',k)
     
-    % 第 k 折下的数据划分
-    [Train,Validate,Test] = Data_Partition(data,label,label_onehot,indices,k,Para_Init.Data_Type,Para_Init.data_slide);
-
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % 划分数据集
+    [Train,Validate,Test,Para_Init.slice_train] = Data_Partition(data,label,label_onehot,indices,k,Para_Init.Data_Type,Para_Init.data_slide);
+        
+     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % PSO-SFNN训练 2次迭代+5个粒子数目 下的隐藏层结点数目
     [Train_values, Train_Para,Para_Init] = PSO_SFNN_Algorithm(Train,Validate,Para_Init,Para_Optimize);
     Train_Acc    = Train_values(1,1);
@@ -78,12 +82,32 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % MeanSE
 [Test_Result_Mean,Test_Result_SE] = Result_MeanSE(Test_Result);
-mkdir('D:\Cheng_jiayou\Revise_PSO_SFNN\PSO_SFNN_v1\Contrast_Result_PSO_SFNN');
-save('D:\Cheng_jiayou\Revise_PSO_SFNN\PSO_SFNN_v1\Contrast_Result_PSO_SFNN\BM_PSO_SFNN.mat',...
-      'Test_Result','Test_Result_Mean', 'Test_Result_SE')
+
+% 保存实验结果
+save([file_path_save  char(file_name_per)  '_PSO_'  num2str(Para_Init.s) num2str(Para_Init.t)  '.mat'], ...
+     'Test_Result','Test_Result_Mean', 'Test_Result_SE')
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [Train,Validate,Test] = Data_Partition(data,label,label_onehot,indices,cv_index,Data_Type,data_slide)
+function [Contrast_Result_Mean,Contrast_Result_SE] = Result_MeanSE(Contrast_Result)
+Contrast_Result_Mean = [];  % 所有参数下的样本的 Mean
+Contrast_Result_SE   = [];  % 所有参数下的样本的 SE
+[folds,columns] = size(Contrast_Result);
+for j = 1: columns
+    Contrast_Result_temp = Contrast_Result(:,j);  % 第 j 列
+    
+    % 计算所有参数下的样本的 Mean 和 SE
+    Contrast_Result_temp_Mean = mean(Contrast_Result_temp);                        % 第 j 列的样本的 Mean
+    Contrast_Result_temp_SE   = 2 * std(Contrast_Result_temp)/sqrt(folds);       % 第 j 列的样本的 SE(95%的置信区间)
+    
+    Contrast_Result_Mean      = [Contrast_Result_Mean, Contrast_Result_temp_Mean]; % 所有参数下的样本的 Mean
+    Contrast_Result_SE        = [Contrast_Result_SE,   Contrast_Result_temp_SE];   % 所有参数下的样本的 SE
+end
+end 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function [Train,Validate,Test, slice_train] = Data_Partition(data,label,label_onehot,indices,cv_index,Data_Type,data_slide)
 
 % 划分训练集,验证集,测试集
 switch data_slide
@@ -91,7 +115,7 @@ switch data_slide
         slice_test = (indices == cv_index);
         cv_temp = cv_index+1;
         if cv_temp>10
-            cv_temp = randperm(10,1);
+            cv_temp = 1;
         end
         slice_validate = (indices == cv_temp);
         slice_train = ~(xor(slice_test,slice_validate)); 
@@ -107,38 +131,6 @@ switch data_slide
         Test.X = data(slice_test,:);      
         Test.Y = label(slice_test,:);     
         Test.Y_onehot = label_onehot(slice_test,:);
-        
-    case 2
-        slice_validate = (indices == cv_index);
-        slice_train = ~(slice_validate); 
-        
-        Train.X = data(slice_train,:);  
-        Train.Y = label(slice_train,:); 
-        Train.Y_onehot = label_onehot(slice_train,:);
-        
-        Validate.X = data(slice_validate,:);  
-        Validate.Y = label(slice_validate,:); 
-        Validate.Y_onehot = label_onehot(slice_validate,:); 
-        
-        Test.X = data(6599:7074,:);      
-        Test.Y = label(6599:7074,:);     
-        Test.Y_onehot = label_onehot(6599:7074,:);   
-    
-    case 3
-        slice_validate=(indices == cv_index);
-        slice_train = ~(slice_validate); 
-        
-        Train.X = data(slice_train,:);  
-        Train.Y = label(slice_train,:); 
-        Train.Y_onehot = label_onehot(slice_train,:);
-        
-        Validate.X = data(slice_validate,:);  
-        Validate.Y = label(slice_validate,:); 
-        Validate.Y_onehot = label_onehot(slice_validate,:); 
-        
-        Test.X = data(4340:4839,:);      
-        Test.Y = label(4340:4839,:);     
-        Test.Y_onehot = label_onehot(4340:4839,:);   
 end
 
 %归一化处理
@@ -161,7 +153,7 @@ switch Data_Type
         TestX_Norm_index = Normalize(TestX_divi,TrainX_feature_mean,TrainX_feature_val); 
         Test.X_Norm = [TestX_Norm_index(:,1:1),Test.X(:,2:11),TestX_Norm_index(:,2:13)];    
         
-    case 2  % EGSS, HTRU,PCB, ESR
+    case 2  % EGSS, HTRU,PCB, ESR, ROE, OD, MCHP, EEG, RSSI
         TrainX_feature_mean = mean(Train.X,1); 
         TrainX_feature_val = var(Train.X,0,1); 
         Train.X_Norm = Normalize(Train.X,TrainX_feature_mean,TrainX_feature_val);    
@@ -227,7 +219,7 @@ switch Data_Type
         TestX_Norm_index = Normalize(TestX_divi,TrainX_feature_mean,TrainX_feature_val); 
         Test.X_Norm = [TestX_Norm_index(:,1),Test.X(:,2:3),TestX_Norm_index(:,2),Test.X(:,5),TestX_Norm_index(:,3:7),Test.X(:,11:20)];  
     
-    case 7  %  QSAR
+    case 7  % QSAR,IVCR, SSMCR
         Train.X_Norm = Train.X;
         Validate.X_Norm = Validate.X;
         Test.X_Norm = Test.X;
@@ -269,23 +261,4 @@ switch Data_Type
         Test.X_Norm = [TestX_Norm_index(:,1:2),Test.X(:,3),TestX_Norm_index(:,3:7),Test.X(:,9)];         
 end
 end
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [Contrast_Result_Mean,Contrast_Result_SE] = Result_MeanSE(Contrast_Result)
-Contrast_Result_Mean = [];  % 所有参数下的样本的 Mean
-Contrast_Result_SE   = [];  % 所有参数下的样本的 SE
-[folds,columns] = size(Contrast_Result);
-for j = 1: columns
-    Contrast_Result_temp = Contrast_Result(:,j);  % 第 j 列
-    
-    % 计算所有参数下的样本的 Mean 和 SE
-    Contrast_Result_temp_Mean = mean(Contrast_Result_temp);                        % 第 j 列的样本的 Mean
-    Contrast_Result_temp_SE   = 2 * std(Contrast_Result_temp)/sqrt(folds);       % 第 j 列的样本的 SE(95%的置信区间)
-    
-    Contrast_Result_Mean      = [Contrast_Result_Mean, Contrast_Result_temp_Mean]; % 所有参数下的样本的 Mean
-    Contrast_Result_SE        = [Contrast_Result_SE,   Contrast_Result_temp_SE];   % 所有参数下的样本的 SE
 end
-end
-
-

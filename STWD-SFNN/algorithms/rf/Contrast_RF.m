@@ -3,21 +3,30 @@ clc
 warning off
 set(0,'DefaultFigureVisible', 'off')
 
-load D:\Cheng_jiayou\Revise_SVC\30—ML_Contrast_v0\data_is\PCB.mat
+file_path_read = 'F:\PaperTwo\220504—papertwo-Chinese\Code-Chinese-two\UCI_file\data_is_random_0922\';  % 读取文件路径      
+file_name = {'ONP', 'OSP', 'EGSS', 'SE', 'HTRU', ...
+             'DCC', 'SB', 'EOL', 'BM', 'ESR', ...
+             'PCB', 'QSAR', 'OD', 'ROE', 'SSMCR'};  % 处理的文件名称
+file_name_per = file_name(5);
+load(['C:\Users\Lenovo\Desktop\data_is_0911\'  char(file_name_per)  '.mat'])
+file_path_save = 'F:\PaperTwo\220504—papertwo-Chinese\Code-Chinese-two\UCI_file\Result_algorithms\10folds_PSO_0922\'; % 读取文件路径
+mkdir(file_path_save) 
 Data_Type = 2;
-[data_r, data_c]=size(data);
 
-firstparam = 100;% 100:200:1000;  %搜索第一个参数的位置列表
-secondparam = sqrt(data_c);% [data_c,log2(data_c),sqrt(data_c),0.6*data_c];  % 搜索第二个参数的位置列表
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 加载预存的 10cv %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+folds_A = 10;
+load([file_path_read  char(file_name_per)  '_TWDSFNN_'  num2str(folds_A)  'cv'  '.mat']) 
+indices = indices_10cv;
+
+[data_r, data_c] = size(data);
+firstparam = 100:100:1000;  %搜索第一个参数的位置列表
+secondparam = [data_c,log2(data_c),sqrt(data_c),0.6 * data_c]; %sqrt(data_c); % % 搜索第二个参数的位置列表
 [F,S] = ndgrid(firstparam,secondparam);
 FF = reshape(F',size(F,1)*size(S,2),1);
 SS = reshape(S',size(F,1)*size(S,2),1);
 Para_list=[FF,SS]; %参数列表
 
-t = 2.262;
-Data_epochs = 10;
-Contrast_RF_Result=[];
-indices=crossvalind('Kfold',data_r,10);
+t = 2.262; Data_epochs = 10; Contrast_RF_Result = [];
 tic
 for k=1:Data_epochs 
     fprintf('数据的交叉验证次数=%d\n',k)
@@ -25,6 +34,7 @@ for k=1:Data_epochs
     % 划分训练集,测试集
     [TrainX_Norm,TrainY,TestX_Norm,TestY] = Data_Partition(data,label,indices,k,Data_Type);
     
+    % [Test_Acc,Test_Weight_F1,Traintime,Testtime]
     fitresult = arrayfun(@(p1,p2) fitfunction(TrainX_Norm,TrainY,TestX_Norm,TestY,p1,p2), FF,SS,'UniformOutput',false);
     Contrast_RF_Result = [Contrast_RF_Result,fitresult];%每列是同一组数据下的不同参数,每行是不同参数下的同一组参数
 end
@@ -36,17 +46,15 @@ RF_Result_temp = [Acc_max,Acc_bias,RF_para_best];
 
 toc
 runtime = toc;
-RF_Result = [RF_Result_temp,runtime,runtime/5]; %最终的实验结果
+RF_Result = [RF_Result_temp,runtime,runtime/Data_epochs]; %最终的实验结果
 
 % 最佳参数下,实验结果
 ntree = RF_para_best(1); % 弱学习器的最大迭代次数
 mtry= RF_para_best(2);   % RF 划分时考虑的最大特征数
 [TrainX_Norm,TrainY,TestX_Norm,TestY] = Contrast_Data_Divide(data,label);
 RF_Result_refresh = fitfunction(TrainX_Norm,TrainY,TestX_Norm,TestY,ntree,mtry);
-mkdir('E:\4—Program\4—Cheng_jiayou\30—ML_Contrast\Contrast_Result');
-save('E:\4—Program\4—Cheng_jiayou\30—ML_Contrast\Contrast_Result\PCB_RF.mat',...
-        'Contrast_RF_Result','RF_Result','RF_Result_refresh', 'RF_para_best',...
-        'Contrast_Result_A_Mean_all','Contrast_Result_A_SE_all')
+save([file_path_save  char(file_name_per)  '_RF'   '.mat'], ...
+     'Contrast_RF_Result','RF_Result','RF_Result_refresh', 'RF_para_best','Contrast_Result_A_Mean_all','Contrast_Result_A_SE_all')
 
     
     
@@ -79,7 +87,7 @@ tic
 [T_sim,~] = classRF_predict(TestX,model);
 [Test_Weight_F1,Test_Acc,Test_Kappa] = WeightF1_Score(TestY,T_sim);
 Testtime = toc;
-Result_Index =[Test_Weight_F1,Test_Acc,Test_Kappa,Traintime,Testtime];
+Result_Index =[Test_Acc,Test_Weight_F1,Traintime,Testtime];
 end
 
 
@@ -127,10 +135,10 @@ end
 
 function [TrainX_Norm,TrainY,TestX_Norm,TestY] = Data_Partition(data,label,indices,cv_index,Data_Type)
 % 划分训练集,验证集,测试集
-slice_test=(indices == cv_index);
-cv_temp=cv_index+1;
-if cv_temp>10
-    cv_temp=randperm(10,1);
+slice_test = (indices == cv_index);
+cv_temp = cv_index + 1;
+if cv_temp > 10
+    cv_temp = 1;
 end
 slice_validate = (indices == cv_temp);
 slice_train = ~(xor(slice_test,slice_validate)); 

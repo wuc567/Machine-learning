@@ -3,33 +3,43 @@ clc
 warning off
 set(0,'DefaultFigureVisible', 'off')
 
-[label,data]=libsvmread('PCB.txt');   %读取文件
-[data_r,data_c] = size(data);
+file_path_read = 'F:\PaperTwo\220504—papertwo-Chinese\Code-Chinese-two\UCI_file\data_is_random_0922\';  % 读取文件路径      
+file_name = {'ONP', 'OSP', 'EGSS', 'SE', 'HTRU', ...
+             'DCC', 'SB', 'EOL', 'BM', 'ESR', ...
+             'PCB', 'QSAR', 'OD', 'ROE', 'SSMCR'};  % 处理的文件名称
+file_name_per = file_name(5);
+SVC_path = [char(file_name_per)  '.txt'];
+[label,data] = libsvmread(SVC_path);   %读取文件  % [label,data] = libsvmread('BM.txt');   %读取文件  
+file_path_save = 'F:\PaperTwo\220504—papertwo-Chinese\Code-Chinese-two\UCI_file\Result_algorithms\10folds_PSO_0922\'; % 读取文件路径
+mkdir(file_path_save) 
 Data_Type = 2;
 
-% 初始化参数
-s=0;   
-t=1;  
-para_st = [' -s ',num2str(s),' -t ',num2str(t) ];
-v=10;  
-init_c=1; 
-init_g=0.125;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 加载预存的 10cv %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+folds_A = 10;
+[data_r,data_c] = size(data);
+load([file_path_read  char(file_name_per)  '_TWDSFNN_'  num2str(folds_A)  'cv'  '.mat']) 
+indices = indices_10cv;
 
-t=2.262; Data_epochs = 10;
-Contrast_SVC_Result=[];SVC_Acc=[];SVC_Para=[];
-indices=crossvalind('Kfold',data_r,10);
+% 初始化参数
+s = 0; t = 1;  para_st = [' -s ',num2str(s),' -t ',num2str(t) ];
+% v = 10;   init_c = 1;  init_g = 0.125;
+
+t = 2.262; Data_epochs = 10;
+Contrast_SVC_Result = [];SVC_Acc = [];SVC_Para = [];
+% indices=crossvalind('Kfold',data_r,10);
 
 tic
 for k=1:Data_epochs 
     fprintf('参数的迭代次数=%d\n',k)
     
     % 划分训练集,测试集
-    [TrainX_Norm,TrainY,TestX_Norm,TestY] = Data_Partition(data,label,indices,k,Data_Type);
+    [TrainX_Norm, TrainY, TestX_Norm, TestY] = Data_Partition(data,label,indices,k,Data_Type);
     
     % 寻找最优参数 c 和 g
     % c 的变化范围是 2^(-2),2^(-1.5),...,2^(4),
     % g 的变化范围是 2^(-4),2^(-3.5),...,2^(4)
-    [bestacc,bestc,bestg] = SVMcgForClass(TrainY,TrainX_Norm,s,t,10,-1,1,1,-1,1,1,0.9);
+    % [bestacc,bestc,bestg] = SVMcgForClass(TrainY,TrainX_Norm,s,t,10,-4,4,1,-4,4,1,0.9);
+    [bestacc,bestc,bestg] = SVMcgForClass(TrainY,TrainX_Norm,s,t,10,-4,-4,1,-4,-4,1,0.9);
     para_cg_best = ['-c ',num2str(bestc),' -g ',num2str(bestg) ];
     para_svc_best = [para_st, para_cg_best];
     
@@ -41,8 +51,11 @@ for k=1:Data_epochs
     
     tic
     [predict_label, accuracy, decision_values] = svmpredict(TestY,TestX_Norm,para_model_best);
+    [Test_Weight_F1,Test_Acc,Test_Kappa] = WeightF1_Score(TestY, predict_label);
     Testtime= toc;
     
+    fitresult = [Test_Acc,Test_Weight_F1,Traintime,Testtime];
+    Contrast_SVC_Result = [Contrast_SVC_Result; fitresult];%每列是同一组数据下的不同参数,每行是不同参数下的同一组参数
     SVC_time{k} = [Traintime,Testtime];
     SVC_Para{k} = para_svc_best;
     SVC_Predict{k} = predict_label;
@@ -50,7 +63,7 @@ for k=1:Data_epochs
     SVC_Acc = [SVC_Acc,[accuracy(1);mean(predict_label == TestY)]]; % 分类的正确率、回归的均方根误差、回归的平方相关系数;
                                   % 当使用预训练核时，并不能取accuracy(1,1)作为分类结果，应该取：mean(predicted_label==testlabel) 
 end
-[Contrast_Result_A_Mean_all,Contrast_Result_A_SE_all] = Result_Mean_SE(SVC_time); % 计算每个评价指标下的Mean,SE
+[Contrast_Result_A_Mean_all,Contrast_Result_A_SE_all] = Result_Mean_SE_SVC(Contrast_SVC_Result); % 计算每个评价指标下的Mean,SE
 
 
 disp('**************** Running Here Now. Going to end ! ! ! **************************')
@@ -63,7 +76,7 @@ SVC_Acc_bias = SVC_Acc_Result(SVC_Acc_index,3);
 SVC_Predict_label = SVC_Predict(:,SVC_Acc_index);
 SVC_true_label = SVC_label(:,SVC_Acc_index);
 
-if size(SVC_Predict_label,2)>2
+if size(SVC_Predict_label,2) > 2
     SVC_y_hat = SVC_Predict_label(:,1);
     SVC_y = SVC_true_label(:,1); 
 else
@@ -72,16 +85,20 @@ else
 end
 
 SVC_para_best = SVC_Para{SVC_Acc_index};
-[Test_Weight_F1,Test_Acc,Test_Kappa] = WeightF1_Score(SVC_y{1}, SVC_y_hat{1}); 
+[Test_Weight_F1_new,Test_Acc_new,Test_Kappa_new] = WeightF1_Score(SVC_y{1}, SVC_y_hat{1}); 
 
 toc
 runtime = toc;
-SVC_Result_Index = [Test_Acc,SVC_Acc_bias,SVC_para_best,runtime,runtime/5,Test_Weight_F1,Test_Kappa]; %最终的实验结果
+SVC_Result_Index = [Test_Acc_new,Test_Weight_F1_new,Test_Kappa_new,SVC_Acc_bias,SVC_para_best,runtime,runtime/Data_epochs]; %最终的实验结果
+save([file_path_save  char(file_name_per)  '_SVC'   '.mat'], ...
+     'Contrast_SVC_Result','SVC_Result_Index', 'SVC_para_best','Contrast_Result_A_Mean_all','Contrast_Result_A_SE_all',...
+     'SVC_Predict_label', 'SVC_true_label')
 
-mkdir('E:\4—Program\4—Cheng_jiayou\30—ML_Contrast\Contrast_Result');
-save('E:\4—Program\4—Cheng_jiayou\30—ML_Contrast\Contrast_Result\PCB_SVC.mat',...
-      'SVC_Acc_Result','SVC_Acc_max', 'SVC_Acc_bias','SVC_para_best', 'SVC_Result_Index',...
-        'Contrast_Result_A_Mean_all','Contrast_Result_A_SE_all')
+
+% mkdir('E:\4—Program\4—Cheng_jiayou\30—ML_Contrast\Contrast_Result');
+% save('E:\4—Program\4—Cheng_jiayou\30—ML_Contrast\Contrast_Result\BM_SVC.mat',...
+%       'SVC_Acc_Result','SVC_Acc_max', 'SVC_Acc_bias','SVC_para_best', 'SVC_Result_Index',...
+%         'Contrast_Result_A_Mean_all','Contrast_Result_A_SE_all')
 % save('OnlineIntention_SVC.mat', 'SVC_para_best','accuracy','bestacc','bestc','bestg')
 
     
@@ -158,30 +175,6 @@ for i = 1:m
         
     end
 end
-
-% figure;
-% [C,h] = contour(X,Y,cg,50:accstep:100);
-% clabel(C,h,'Color','r');
-% xlabel('log2c','FontSize',12);
-% ylabel('log2g','FontSize',12);
-% firstline = 'SVC参数选择结果图(等高线图)[GridSearchMethod]'; 
-% secondline = ['Best c=',num2str(bestc),' g=',num2str(bestg), ...
-%     ' CVAccuracy=',num2str(bestacc),'%'];
-% title({firstline;secondline},'Fontsize',12);
-% grid on; 
-% 
-% figure;
-% meshc(X,Y,cg);
-% % mesh(X,Y,cg);
-% % surf(X,Y,cg);
-% axis([cmin,cmax,gmin,gmax,30,100]);
-% xlabel('log2c','FontSize',12);
-% ylabel('log2g','FontSize',12);
-% zlabel('Accuracy(%)','FontSize',12);
-% firstline = 'SVC参数选择结果图(3D视图)[GridSearchMethod]'; 
-% secondline = ['Best c=',num2str(bestc),' g=',num2str(bestg), ...
-%     ' CVAccuracy=',num2str(bestacc),'%'];
-% title({firstline;secondline},'Fontsize',12);
 end
 
 
@@ -231,8 +224,8 @@ function [TrainX_Norm,TrainY,TestX_Norm,TestY] = Data_Partition(data,label,indic
 % 划分训练集,验证集,测试集
 slice_test=(indices == cv_index);
 cv_temp=cv_index+1;
-if cv_temp>10
-    cv_temp=randperm(10,1);
+if cv_temp > 10
+    cv_temp = 1;
 end
 slice_validate = (indices == cv_temp);
 slice_train = ~(xor(slice_test,slice_validate)); 

@@ -4,27 +4,27 @@
 function [Act_Value,Der_Act_Der_z,Y_logits,Y_prob,Y_hat,Weight_F1,Acc,Kappa,LossFun_Error,LossFun_Value]=SFNN_Forward(X_Norm,Y_onehot,Y,...
                                                                               W1,b1,W2,b2,s,lambda,LossFun,FL_Weight,FL_Adjust)
 [Act_Value,Der_Act_Der_z]=Activate_Function(X_Norm,W1,b1,s); %激活函数,输出的size(1,8000)
-Y_logits = W2 * Act_Value + b2;             % 输出层的输出值,size=(类别数,样本量)
-Y_logits_max = Y_logits-repmat(max(Y_logits),[size(Y_logits,1),1]); % 减去该列的最大值,避免softmax溢出
-Y_logits_exp = exp(Y_logits_max);
-Y_prob = bsxfun(@rdivide,Y_logits_exp,sum(Y_logits_exp,1)); % 经softmax变换后的概率分布,size=(类别数,样本量)
-Y_pred = logical(Y_prob==max(Y_prob));  % argmax后的网络输出,size=(类别数,样本量)
-Y_hat = vec2ind(Y_pred)';               % 将热编码转换成标签,Y_hat的size=(样本量,1)
+Y_logits=W2*Act_Value+b2;             % 输出层的输出值,size=(类别数,样本量)
+Y_logits_max=Y_logits-repmat(max(Y_logits),[size(Y_logits,1),1]); % 减去该列的最大值,避免softmax溢出
+Y_logits_exp=exp(Y_logits_max);
+Y_prob=bsxfun(@rdivide,Y_logits_exp,sum(Y_logits_exp,1)); % 经softmax变换后的概率分布,size=(类别数,样本量)
+Y_pred=logical(Y_prob==max(Y_prob));  % argmax后的网络输出,size=(类别数,样本量)
+Y_hat=vec2ind(Y_pred)';               % 将热编码转换成标签,Y_hat的size=(样本量,1)
 [Weight_F1,Acc,Kappa]=WeightF1_Score(Y,Y_hat);
 
 if LossFun==1  
     %CE交叉熵损失函数 
-    LossFun_Error = -sum(Y_onehot.*log(Y_prob+10^(-12)),1); %LossFun_Error的size=(1,样本量), %sum(~,1)的1表示对列求和
-    LossFun_Value = 1/size(X_Norm,2).*sum(LossFun_Error)+lambda/2*(sqrt(sum(sum(W1.^2)))+sqrt(sum(sum(W2.^2))));       
+    LossFun_Error=-sum(Y_onehot.*log(Y_prob+10^(-12)),1); %LossFun_Error的size=(1,样本量), %sum(~,1)的1表示对列求和
+    LossFun_Value=1/size(X_Norm,2).*sum(LossFun_Error)+lambda/2*(sqrt(sum(sum(W1.^2)))+sqrt(sum(sum(W2.^2))));       
 else
     %FL聚焦损失函数
-    LossFun_Error = -sum(FL_Weight.*(1-Y_prob).^FL_Adjust.*Y_onehot.*log(Y_prob+10^(-12)),1);  %size=(1,样本量)
-    LossFun_Value = 1/size(X_Norm,2).*sum(LossFun_Error)+lambda/2*(sqrt(sum(sum(W1.^2)))+sqrt(sum(sum(W2.^2)))); 
+    LossFun_Error=-sum(FL_Weight.*(1-Y_prob).^FL_Adjust.*Y_onehot.*log(Y_prob+10^(-12)),1);  %size=(1,样本量)
+    LossFun_Value=1/size(X_Norm,2).*sum(LossFun_Error)+lambda/2*(sqrt(sum(sum(W1.^2)))+sqrt(sum(sum(W2.^2)))); 
 end
 
 function [Weight_F1,Acc,Kappa] = WeightF1_Score(Y,Y_hat)
-size_Y = length(Y);
-if size_Y == 0
+size_Y=length(Y);
+if size_Y==0
     error(message('MATLAB:UNIQUE:NotEnoughInputs'));
 end
 

@@ -11,7 +11,7 @@ epsilon = 10^(-12);Weight_F1 = [];Loss = [];Para_Batch = [];Kappa = [];Acc = [];
 rp = randperm(Train_Num); 
 for tb = 1:BatchSize:Train_Num  %iterations
     tmp = tb + BatchSize-1;
-    if tmp > Train_Num  %µ±×îºóÒ»×éµÄÊı¾İÁ¿²»×ãBatch_Size´óĞ¡Ê±,Ôò½«Æäµ¥¶ÀÉèÎªÒ»×é
+    if tmp > Train_Num  %å½“æœ€åä¸€ç»„çš„æ•°æ®é‡ä¸è¶³Batch_Sizeå¤§å°æ—¶,åˆ™å°†å…¶å•ç‹¬è®¾ä¸ºä¸€ç»„
         Batch_TrainX = TrainX(:,rp(tb:end)); 
         Batch_TrainY = TrainY(:,rp(tb:end)); 
         Batch_Y_prob = Y_prob(:,rp(tb:end));   
@@ -19,15 +19,15 @@ for tb = 1:BatchSize:Train_Num  %iterations
         Batch_Der_z = Der_z(:,rp(tb:end)); 
         Batch_Num = size(Batch_TrainX,1);
     else
-        Batch_TrainX = TrainX(:,rp(tb:tmp)); %Ñù±¾
-        Batch_TrainY = TrainY(:,rp(tb:tmp)); %ÕæÊµ±êÇ©
-        Batch_Y_prob = Y_prob(:,rp(tb:tmp)); %Ô¤²â±êÇ©
-        Batch_Act_Value = Act_Value(:,rp(tb:tmp));  %¼¤»îº¯ÊıÖµ
-        Batch_Der_z = Der_z(:,rp(tb:tmp)); %¼¤»îº¯Êı¹ØÓÚz(=W1*X+b1)µÄÆ«µ¼Êı
+        Batch_TrainX = TrainX(:,rp(tb:tmp)); %æ ·æœ¬
+        Batch_TrainY = TrainY(:,rp(tb:tmp)); %çœŸå®æ ‡ç­¾
+        Batch_Y_prob = Y_prob(:,rp(tb:tmp)); %é¢„æµ‹æ ‡ç­¾
+        Batch_Act_Value = Act_Value(:,rp(tb:tmp));  %æ¿€æ´»å‡½æ•°å€¼
+        Batch_Der_z = Der_z(:,rp(tb:tmp)); %æ¿€æ´»å‡½æ•°å…³äºz(=W1*X+b1)çš„åå¯¼æ•°
         Batch_Num = size(Batch_TrainX,2);
     end
     
-    %¼ÆËãÅúÁ¿Ñù±¾ÏÂµÄÌİ¶È
+    %è®¡ç®—æ‰¹é‡æ ·æœ¬ä¸‹çš„æ¢¯åº¦
     [Der_W2,Der_b2,Der_W1,Der_b1] = Parameter_Gradient(Batch_TrainX,Batch_TrainY,Batch_Y_prob,Batch_Act_Value,Batch_Der_z,...
                                                      W1,W2,lambda,LossFun,FL_Weight,FL_Adjust);
     Batch_Der_W2 = 1/Batch_Num.*Der_W2;
@@ -36,7 +36,7 @@ for tb = 1:BatchSize:Train_Num  %iterations
     Batch_Der_b1 = 1/Batch_Num.*Der_b1;
     
     if p==1
-        %Adamµ÷²Î·¨
+        %Adamè°ƒå‚æ³•
         V_dW1 = beta1.* V_dW1 + (1-beta1).* Batch_Der_W1;
         S_dW1 = beta2.* S_dW1 + (1-beta2).* (Batch_Der_W1.^2);
         V_dW1_hat = V_dW1./(1-beta1.^iter_count);
@@ -68,7 +68,7 @@ for tb = 1:BatchSize:Train_Num  %iterations
     Acc = [Acc;Vali_Acc];
     Kappa = [Kappa;Vali_Kappa];
     Loss = [Loss;Vali_Loss];
-    Para_Batch = [Para_Batch;{W1,b1,W2,b2}]; %¼ÇÂ¼Ã¿´Îepochs¶ÔÓ¦µÄ²ÎÊı
+    Para_Batch = [Para_Batch;{W1,b1,W2,b2}]; %è®°å½•æ¯æ¬¡epochså¯¹åº”çš„å‚æ•°
 end
 
 [Acc_Batch,Acc_Index] = max(Acc);
@@ -87,24 +87,24 @@ clear Weight_F1 Acc  Kappa Loss Para_Batch
 function [Der_L_Der_W2,Der_L_Der_b2,Der_L_Der_W1,Der_L_Der_b1] = Parameter_Gradient(X,Y,Y_prob,Activate_Value,Der_Activate_Der_z,...
                                                                                   W1,W2,lambda,LossFun,FL_Weight,FL_Adjust)
 epsilon = 10^(-12);
-if LossFun == 1  %CE½»²æìØËğÊ§º¯Êı
-    Der_L_Der_A2 = Y_prob-Y;   %(Àà±ğÊı,Ñù±¾Á¿)=(2,8000)   
-else           %FL¾Û½¹ËğÊ§º¯Êı
-    tmp1 = Y_prob - Y; %(Àà±ğÊı,Ñù±¾Á¿)=(2,8000)
-    tmp2 = 1-Y_prob; %(Àà±ğÊı,Ñù±¾Á¿)=(2,8000)
+if LossFun == 1  %CEäº¤å‰ç†µæŸå¤±å‡½æ•°
+    Der_L_Der_A2 = Y_prob-Y;   %(ç±»åˆ«æ•°,æ ·æœ¬é‡)=(2,8000)   
+else           %FLèšç„¦æŸå¤±å‡½æ•°
+    tmp1 = Y_prob - Y; %(ç±»åˆ«æ•°,æ ·æœ¬é‡)=(2,8000)
+    tmp2 = 1-Y_prob; %(ç±»åˆ«æ•°,æ ·æœ¬é‡)=(2,8000)
     tmp3 = FL_Adjust.* tmp2.^FL_Adjust; %(2,8000)
-    tmp4 = (tmp3).*Y_prob.*(log(Y_prob+epsilon)).*Y; %(Àà±ğÊı,Ñù±¾Á¿)=(2,8000)  
-    tmp5 = (1-Y_prob).^FL_Adjust; %(Àà±ğÊı,Ñù±¾Á¿)=(2,8000)
-    tmp6 = tmp1.*tmp5;  %(Àà±ğÊı,Ñù±¾Á¿)=(2,8000)
-    Der_L_Der_A2 = FL_Weight.*(tmp4 + tmp6); %(Àà±ğÊı,Ñù±¾Á¿)=(2,8000)   
+    tmp4 = (tmp3).*Y_prob.*(log(Y_prob+epsilon)).*Y; %(ç±»åˆ«æ•°,æ ·æœ¬é‡)=(2,8000)  
+    tmp5 = (1-Y_prob).^FL_Adjust; %(ç±»åˆ«æ•°,æ ·æœ¬é‡)=(2,8000)
+    tmp6 = tmp1.*tmp5;  %(ç±»åˆ«æ•°,æ ·æœ¬é‡)=(2,8000)
+    Der_L_Der_A2 = FL_Weight.*(tmp4 + tmp6); %(ç±»åˆ«æ•°,æ ·æœ¬é‡)=(2,8000)   
 end
 
-Der_L_Der_W2 = Der_L_Der_A2 * Activate_Value' + lambda.*W2;%size=(Àà±ğÊı,Òş½ÚÊı)
-Der_L_Der_b2 = Der_L_Der_A2;  %size=(Àà±ğÊı,Ñù±¾Á¿)
+Der_L_Der_W2 = Der_L_Der_A2 * Activate_Value' + lambda.*W2;%size=(ç±»åˆ«æ•°,éšèŠ‚æ•°)
+Der_L_Der_b2 = Der_L_Der_A2;  %size=(ç±»åˆ«æ•°,æ ·æœ¬é‡)
 
-Der_L_Der_Activate = W2' * Der_L_Der_A2;     %size=(Òş½ÚÊı,Ñù±¾Á¿)
-Der_L_Der_A1 = Der_L_Der_Activate .* Der_Activate_Der_z;%ÖğÔªËØÏà³Ë,size=(Òş½ÚÊı,Ñù±¾Á¿)
-Der_L_Der_W1 = Der_L_Der_A1 * X'+lambda.*W1; %size=(Òş½ÚÊı,ÌØÕ÷Êı)
-Der_L_Der_b1 = Der_L_Der_A1;                 %size=(Òş½ÚÊı,Ñù±¾Á¿)
+Der_L_Der_Activate = W2' * Der_L_Der_A2;     %size=(éšèŠ‚æ•°,æ ·æœ¬é‡)
+Der_L_Der_A1 = Der_L_Der_Activate .* Der_Activate_Der_z;%é€å…ƒç´ ç›¸ä¹˜,size=(éšèŠ‚æ•°,æ ·æœ¬é‡)
+Der_L_Der_W1 = Der_L_Der_A1 * X'+lambda.*W1; %size=(éšèŠ‚æ•°,ç‰¹å¾æ•°)
+Der_L_Der_b1 = Der_L_Der_A1;                 %size=(éšèŠ‚æ•°,æ ·æœ¬é‡)
 
 
